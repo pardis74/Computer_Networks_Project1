@@ -6,22 +6,9 @@
 
 In this project, you will implement a small DNS client in **C or C++** from scratch. Your program will construct DNS queries using the standard DNS wire format, send them to a DNS server over UDP, receive the raw response, and parse the response without relying on DNS client/parsing libraries.
 
-The goal is not to implement a complete DNS resolver. Instead, you will implement a carefully selected subset of DNS that exercises application-layer protocol design, binary message formats, network byte order, variable-length fields, UDP communication, and DNS name compression.
 
 Your implementation will be tested automatically against both supplied and hidden DNS messages.
 
-## Learning Objectives
-
-By completing this project, you should be able to:
-
-- Explain how an application-layer protocol is represented on the wire.
-- Construct and parse binary protocol messages.
-- Work correctly with network byte order.
-- Encode and decode DNS domain names.
-- Interpret DNS headers, questions, and resource records.
-- Decode DNS name-compression pointers.
-- Send and receive DNS messages over UDP.
-- Safely skip DNS record types that your program does not interpret.
 
 ## Rules
 
@@ -44,10 +31,7 @@ In addition, you must implement **one** of the following record types:
 
 - MX
 - TXT
-- PTR
-- SRV
 - SOA
-- CAA
 
 Your program must report its selected type through the `--supported` command described below.
 
@@ -78,15 +62,7 @@ The program must:
 5. parse the DNS message; and
 6. print the result using the required output format.
 
-### Parse-file mode
 
-```bash
-./dnsclient --parse <packet-file>
-```
-
-The file contains exactly one raw DNS message, beginning with the DNS header. There is no Ethernet, IP, or UDP header in this file.
-
-This mode allows the DNS parser to be tested independently of socket communication.
 
 ### Supported-types mode
 
@@ -140,7 +116,7 @@ Diagnostic/debug output should be written to `stderr`, not `stdout`.
 
 Think of this as building the parsing/construction logic behind a tool like `dig` — the same information a `dig` response shows you (header flags and counts, the question, and the answer records with their names, types, TTLs, and values, including compressed names) — just emitted in this project's own output format instead of `dig`'s. That means correctly handling the DNS header, domain-name encoding/decoding (including compression pointers), and resource records for all required types, while safely skipping any record type you don't support.
 
-The wire format details (header layout, label encoding, record structure, compression pointer bits, etc.) are all in the [DNS RFCs](https://www.rfc-editor.org/rfc/rfc1035) and widely available references — figuring those out is part of the assignment.
+The DNS format details are all in the [DNS RFCs](https://www.rfc-editor.org/rfc/rfc1035).
 
 ## Out of Scope
 
@@ -157,34 +133,28 @@ You are **not** required to implement:
 
 Your code should nevertheless perform reasonable length/bounds checks and must not intentionally read outside the received message.
 
-## Step-by-Step Instructions
+## Recommended Steps
 
-Work through these steps in order. Each step should be its own GitHub issue and its own branch/PR — see [Repository Workflow](#repository-workflow-required) below.
+At a high level, work through the project in roughly this order:
 
-1. **Get access to your repository and clone it.** Follow your instructor's instructions for obtaining your project repository, then clone it locally.
-2. **Set up your project skeleton.** Create `src/main.c`, `src/dns.c`, and `src/dns.h` (or the C++ equivalents), plus a `Makefile` that builds an executable named `dnsclient`. Commit this as your first PR.
-3. **Parse a supplied simple A-response file.** Write a raw DNS response to a file and get `--parse` reading bytes from it before you write any protocol logic.
-4. **Implement DNS header parsing.** Read and validate the 12-byte header (ID, flags, counts).
-5. **Implement uncompressed domain-name decoding.** Handle the length-prefixed label format ending in a zero byte.
-6. **Implement A record parsing.** Parse the question section and a single A answer; produce the required `STATUS`/`QUESTION`/`ANSWER` output.
-7. **Construct an A query.** Build the header, question, and hostname encoding for an outgoing query.
-8. **Add UDP communication.** Send the query to the target server on port 53 and receive the raw response.
-9. **Implement DNS name compression.** Handle pointers, and names made of labels followed by a pointer.
-10. **Add AAAA, CNAME, and NS parsing.** Extend your resource-record logic to cover all four mandatory types.
-11. **Correctly skip unsupported records.** Use `RDLENGTH` to advance past any record type you don't interpret, without stopping parsing.
-12. **Implement your group's selected optional type** (MX, TXT, PTR, SRV, SOA, or CAA) and report it via `--supported`.
-13. **Handle transaction-ID verification and NXDOMAIN.** Reject mismatched responses; print the correct output for NXDOMAIN.
-14. **Test against the Docker DNS environment** (see below), including malformed/truncated input and error paths.
-15. **Review your issue/PR history** to make sure your work is fully logged before the deadline (see below).
+1. Accept the assignment and set up your project skeleton (`Makefile`, source files, `--supported` output).
+2. Get message parsing working offline first — DNS header, then uncompressed names, then a basic A record.
+3. Extend parsing to the rest of the mandatory record types, and safely skipping unsupported records.
+4. Add query construction and UDP communication so live queries work end-to-end.
+5. Implement your selected optional record type.
+6. Test thoroughly against the Docker DNS environment, including malformed and edge-case input.
+
+**Make sure these steps are clearly marked in the commits**, not just as a single final commit. See [Repository Workflow](#repository-workflow-required) below for how that's tracked.
 
 ## Repository Workflow (required)
 
-This project is distributed and submitted through **GitHub**. Your repository *is* your submission, and your commit/issue/PR history is part of how your work is evaluated — not just the final code.
+This project is distributed and submitted through **GitHub**, using **[Classroom 50](https://github.com/foundation50/classroom50)** to manage assignment repositories. Your repository *is* your submission, and your commit/issue/PR history is part of how your work is evaluated — not just the final code.
 
 ### Setup
 
-1. Get access to your repository following your instructor's instructions and clone it.
-2. Confirm you have push access before you start working.
+1. Accept the course organization invite you're sent. You must join the organization before you can accept any assignment.
+2. Use the assignment invite link shared separately to accept this assignment — this creates your own repository under the course organization, seeded from this project.
+3. Clone your repository locally and confirm you have push access before you start working.
 
 ### Track your work with Issues
 

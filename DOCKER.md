@@ -14,16 +14,18 @@ Inside the Docker network, the DNS server has the fixed address:
 10.53.0.53
 ```
 
+The Dockerfile and `docker-compose.yml` live in [docker/](docker/). Run every `docker compose` command below from the **project root**, pointing at that file with `-f docker/docker-compose.yml`.
+
 ## Start the environment
 
 ```bash
-docker compose up -d dns
+docker compose -f docker/docker-compose.yml up -d dns
 ```
 
 Check that the DNS container is healthy:
 
 ```bash
-docker compose ps
+docker compose -f docker/docker-compose.yml ps
 ```
 
 ## Build and run your program in the student container
@@ -31,7 +33,7 @@ docker compose ps
 Open a shell:
 
 ```bash
-docker compose run --rm student
+docker compose -f docker/docker-compose.yml run --rm student
 ```
 
 Then build normally:
@@ -107,7 +109,7 @@ The public server exists for development only. The autograder may launch a separ
 ## Stop the environment
 
 ```bash
-docker compose down
+docker compose -f docker/docker-compose.yml down
 ```
 
 ## Installing Docker
@@ -159,9 +161,9 @@ You need Docker Desktop (or the Docker Engine + Compose plugin on Linux) to use 
 From the project root, confirm the environment starts correctly before you begin development:
 
 ```bash
-docker compose up -d dns
-docker compose ps
-docker compose down
+docker compose -f docker/docker-compose.yml up -d dns
+docker compose -f docker/docker-compose.yml ps
+docker compose -f docker/docker-compose.yml down
 ```
 
 If `docker compose ps` shows the `dns` service as healthy, your Docker setup is ready.

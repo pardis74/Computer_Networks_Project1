@@ -4,8 +4,8 @@ services:
     container_name: dns-project-resolver
     command: ["-g", "-c", "/etc/bind/named.conf"]
     volumes:
-      - ./docker/bind/named.conf:/etc/bind/named.conf:ro
-      - ./docker/bind/db.lab.test:/etc/bind/db.lab.test:ro
+      - ./bind/named.conf:/etc/bind/named.conf:ro
+      - ./bind/db.lab.test:/etc/bind/db.lab.test:ro
     networks:
       dnslab:
         ipv4_address: 10.53.0.53
@@ -17,11 +17,11 @@ services:
 
   student:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     working_dir: /project
     volumes:
-      - .:/project
+      - ..:/project
     networks:
       dnslab:
         ipv4_address: 10.53.0.10
