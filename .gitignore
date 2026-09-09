@@ -1,0 +1,5 @@
+dnsclient
+src/*.o
+solutions/src/*.o
+*.swp
+.DS_Store

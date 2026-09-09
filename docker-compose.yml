@@ -1,0 +1,41 @@
+services:
+  dns:
+    image: internetsystemsconsortium/bind9:9.20
+    container_name: dns-project-resolver
+    command: ["-g", "-c", "/etc/bind/named.conf"]
+    volumes:
+      - ./docker/bind/named.conf:/etc/bind/named.conf:ro
+      - ./docker/bind/db.lab.test:/etc/bind/db.lab.test:ro
+    networks:
+      dnslab:
+        ipv4_address: 10.53.0.53
+    healthcheck:
+      test: ["CMD-SHELL", "named-checkconf /etc/bind/named.conf && named-checkzone lab.test /etc/bind/db.lab.test"]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+
+  student:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /project
+    volumes:
+      - .:/project
+    networks:
+      dnslab:
+        ipv4_address: 10.53.0.10
+    depends_on:
+      dns:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-lc"]
+    command: ["make && exec /bin/sh"]
+    stdin_open: true
+    tty: true
+
+networks:
+  dnslab:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.53.0.0/24

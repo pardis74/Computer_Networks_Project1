@@ -1,0 +1,44 @@
+$TTL 300
+@   IN  SOA ns1.lab.test. admin.lab.test. (
+        2026090401 ; serial
+        3600       ; refresh
+        900        ; retry
+        604800     ; expire
+        300        ; minimum
+)
+
+    IN  NS      ns1.lab.test.
+    IN  NS      ns2.lab.test.
+
+ns1         IN  A       10.53.0.53
+ns2         IN  A       10.53.0.54
+
+; Mandatory record types
+simple      60  IN  A       192.0.2.10
+ipv6        90  IN  AAAA    2001:db8::10
+alias       120 IN  CNAME   simple.lab.test.
+ns-demo     180 IN  NS      ns1.lab.test.
+
+; Multiple answers / parser traversal
+multi       45  IN  A       192.0.2.21
+multi       45  IN  A       192.0.2.22
+multi       45  IN  A       192.0.2.23
+
+; A longer name is useful for label-encoding tests.
+very-long-service-name-for-testing 75 IN A 192.0.2.30
+
+; Optional record types. Each group implements exactly one.
+mail        300 IN  MX      10 mx1.lab.test.
+mx1         300 IN  A       192.0.2.40
+
+txt-demo    300 IN  TXT     "networks-project" "dns-parser"
+
+; PTR is legal as RDATA here even though reverse zones are the usual use case.
+ptr-demo    300 IN  PTR     simple.lab.test.
+
+_service._tcp 300 IN SRV    10 20 8080 service-target.lab.test.
+service-target 300 IN A     192.0.2.50
+
+; SOA is queried at the zone apex: lab.test SOA
+
+caa-demo    300 IN  CAA     0 issue "example-ca.test"
