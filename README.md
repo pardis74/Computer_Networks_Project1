@@ -70,7 +70,7 @@ The program must:
 ./dnsclient --supported
 ```
 
-Example output for a group choosing MX:
+Example output for a student choosing MX:
 
 ```text
 A AAAA CNAME NS MX
@@ -167,7 +167,6 @@ This project is distributed and submitted through **GitHub**, using **[Classroom
 - Do not commit directly to `main`. Create a feature branch per issue (e.g., `feature/header-parsing`, `feature/name-compression`).
 - Open a Pull Request from your branch back into `main` for every meaningful chunk of work.
 - Write a short PR description explaining what changed and why. Merge the PR once it builds and works as expected.
-- If working in a group, have a teammate review the PR before merging when possible.
 
 ### Log your progress
 
@@ -200,4 +199,18 @@ A Docker-based DNS server is included so that everyone can test against the same
 
 See [DOCKER.md](DOCKER.md) for how to start the environment, the supplied test records, and Docker installation instructions.
 
+## eLC Submission (Record-Keeping)
+
+Your GitHub repository is still the actual submission that gets graded, but you must also submit to the eLC assignment dropbox before the deadline so there's an official, timestamped record on file.
+
+Submit a single `.zip` file to the eLC dropbox containing:
+
+- your complete project source tree (same contents as your repository); and
+- your git log, exported to a text file and included in the zip:
+
+  ```bash
+  git log > git-log.txt
+  ```
+
+This eLC submission does not replace pushing your code to GitHub — it's only a record of what you submitted and when. 
 
