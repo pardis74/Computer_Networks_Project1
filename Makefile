@@ -1,14 +1,14 @@
-CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic -O2
-TARGET = dnsclient
-SOURCES = src/main.cpp
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2
+TARGET := dnsclient
+SOURCE := src/main.cpp
+
+.PHONY: all clean
 
 all: $(TARGET)
 
-$(TARGET): $(SOURCES)
-	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(TARGET)
+$(TARGET): $(SOURCE) src/mainpart2.cpp src/mainpart3.cpp
+	$(CXX) $(CXXFLAGS) $(SOURCE) -o $(TARGET)
 
 clean:
 	rm -f $(TARGET) src/*.o
-
-.PHONY: all clean
